@@ -19,7 +19,7 @@ bool is_running = false;
 
 int fov_factor = 640;
 
-vec3_t camera_position = { 0, 0, -5 };
+vec3_t camera_position = { 0, 0, 0 };
 vec2_t projected_points[729];
 
 vec3_t cube_rotation = { 0, 0, 0 };
@@ -74,6 +74,8 @@ void update(void) {
 
 		triangle_t projected_triangle;
 
+		vec3_t transformed_vertices[3];
+
 		// Loop all the vertices and apply transformation.
 		for (int j = 0; j < 3; j++) {
 			vec3_t transformed_vertex = face_vertices[j];
@@ -81,9 +83,32 @@ void update(void) {
 			transformed_vertex = vec3_rotate_y(transformed_vertex, mesh.rotation.y);
 			transformed_vertex = vec3_rotate_z(transformed_vertex, mesh.rotation.z);
 
-			transformed_vertex.z -= camera_position.z;
+			transformed_vertex.z += -5;
 
-			vec2_t projected_point = project(transformed_vertex);
+			transformed_vertices[j] = transformed_vertex;
+		}
+
+		vec3_t vector_a = transformed_vertices[0];
+		vec3_t vector_b = transformed_vertices[1];
+		vec3_t vector_c = transformed_vertices[2];
+
+		vec3_t vector_ab = vec3_sub(vector_b, vector_a);
+		vec3_t vector_ac = vec3_sub(vector_c, vector_a);
+
+		vec3_t normal = vec3_cross(vector_ab, vector_ac);
+
+		vec3_normalize(&normal);
+
+		vec3_t camera_ray = vec3_sub(camera_position, vector_a);
+
+		float dot_normal_camera = vec3_dot(normal, camera_ray);
+
+		if (dot_normal_camera < 0) {
+			continue;
+		}
+
+		for (int j = 0; j < 3; j++) {
+			vec2_t projected_point = project(transformed_vertices[j]);
 
 			projected_point.x += (window_width / 2);
 			projected_point.y += (window_height / 2);
@@ -106,8 +131,10 @@ void render(void) {
 		draw_rect(triangle.points[1].x, triangle.points[1].y, 3, 3, 0xFFFFFF00);
 		draw_rect(triangle.points[2].x, triangle.points[2].y, 3, 3, 0xFFFFFF00);
 
-		draw_triangle(triangle.points[0].x, triangle.points[0].y, triangle.points[1].x, triangle.points[1].y, triangle.points[2].x, triangle.points[2].y, 0xFFFFFF00);
+		draw_triangle(triangle.points[0].x, triangle.points[0].y, triangle.points[1].x, triangle.points[1].y, triangle.points[2].x, triangle.points[2].y, 0xFF000000);
+		draw_filled_triangle(triangle.points[0].x, triangle.points[0].y, triangle.points[1].x, triangle.points[1].y, triangle.points[2].x, triangle.points[2].y, 0xFFFFFFFF);
 	}
+
 
 
 	array_free(triangles_to_render);
