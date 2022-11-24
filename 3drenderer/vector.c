@@ -51,7 +51,13 @@ void vec2_normalize(vec2_t* v)
 	v->y = v->y / length;
 }
 
-
+vec2_t vec2_from_vec4(vec4_t v)
+{
+	vec2_t result;
+	result.x = v.x;
+	result.y = v.y;
+	return result;
+}
 
 
 float vec3_length(vec3_t v) {
@@ -143,4 +149,24 @@ vec3_t vec3_rotate_z(vec3_t v, float angle) {
 		.z = v.z
 	};
 	return rotated_vector;
+}
+
+vec3_t vec3_from_vec4(vec4_t v)
+{
+	vec3_t result;
+	result.x = v.x;
+	result.y = v.y;
+	result.z = v.z;
+	return result;
+}
+
+vec4_t vec4_from_vec3(vec3_t v)
+{
+	vec4_t result = {
+		.x = v.x,
+		.y = v.y,
+		.z = v.z,
+		.w = 1
+	};
+	return result;
 }

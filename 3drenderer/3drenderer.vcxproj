@@ -144,15 +144,25 @@
   <ItemGroup>
     <ClCompile Include="array.c" />
     <ClCompile Include="display.c" />
+    <ClCompile Include="light.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="matrix.c" />
     <ClCompile Include="mesh.c" />
+    <ClCompile Include="texture.c" />
     <ClCompile Include="triangle.c" />
     <ClCompile Include="vector.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="array.h" />
     <ClInclude Include="display.h" />
+    <ClCompile Include="swap.c">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClInclude Include="light.h" />
+    <ClInclude Include="matrix.h" />
     <ClInclude Include="mesh.h" />
+    <ClInclude Include="swap.h" />
+    <ClInclude Include="texture.h" />
     <ClInclude Include="triangle.h" />
     <ClInclude Include="vector.h" />
   </ItemGroup>
